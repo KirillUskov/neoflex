@@ -1,24 +1,16 @@
 package ru.kduskov.vacationcalculator.service;
 
-import lombok.extern.log4j.Log4j;
-import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.stereotype.Service;
 import ru.kduskov.vacationcalculator.constant.BoundaryValues;
 import ru.kduskov.vacationcalculator.exception.InvalidRequestException;
 import ru.kduskov.vacationcalculator.util.DateUtil;
 import ru.kduskov.vacationcalculator.util.NumberUtil;
 
-import javax.validation.constraints.FutureOrPresent;
-import javax.validation.constraints.Max;
-import javax.validation.constraints.Min;
 import java.time.LocalDate;
-import java.time.temporal.ChronoUnit;
 import java.util.Objects;
 import java.util.logging.Logger;
 
 import static java.lang.String.format;
-import static ru.kduskov.vacationcalculator.constant.BoundaryValues.MAX_VACATION_DURATION;
-import static ru.kduskov.vacationcalculator.constant.BoundaryValues.MIN_VACATION_DURATION;
 
 @Service
 public class VacationPaymentCalculatorService {
