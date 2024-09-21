@@ -16,7 +16,7 @@ import static java.lang.String.format;
 public class VacationPaymentCalculatorService {
     private static final Logger logger = Logger.getLogger(VacationPaymentCalculatorService.class.getName());
 
-    private static final double AVG_DAYS_IN_MONTH_AMOUNT = 29.3;
+    private static final double AVG_DAYS_IN_MONTH = 29.3;
 
     public Double calculatePayment(double avgSalary, Integer duration, LocalDate startDate, LocalDate endDate) throws InvalidRequestException {
         logger.info(format("Request: %f, %d, %s, %s", avgSalary, duration, startDate, endDate));
@@ -40,7 +40,7 @@ public class VacationPaymentCalculatorService {
     }
 
     private double getPayment(int vacationDuration, double salary) {
-        double dailyWage = salary / AVG_DAYS_IN_MONTH_AMOUNT;
+        double dailyWage = salary / AVG_DAYS_IN_MONTH;
         return NumberUtil.roundDoubleTwoDigits(vacationDuration * dailyWage);
     }
 }
