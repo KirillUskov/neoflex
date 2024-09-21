@@ -1,0 +1,85 @@
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Калькулятор отпускных</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 30px;
+        }
+        input {
+            margin: 10px 0;
+            display: block;
+        }
+    </style>
+</head>
+<body>
+<h1>Калькулятор отпускных</h1>
+
+<label for="averageSalary">Средняя зарплата:</label>
+<input type="number" id="averageSalary" required>
+
+<label for="vacationDays">Количество дней отпуска:</label>
+<input type="number" id="vacationDays" required>
+
+<label for="startDate">Начало отпуска:</label>
+<input type="date" id="startDate" required>
+
+<label for="endDate">Конец отпуска:</label>
+<input type="date" id="endDate" required>
+
+<button id="calculate">Рассчитать отпускные</button>
+
+<h3 id="result"></h3>
+
+<script>
+    // Функция для преобразования объекта в строку параметров
+    function encodeParams(params) {
+        return Object.keys(params).map(function(k) {
+            return encodeURIComponent(k) + '=' + encodeURIComponent(params[k])
+        }).join('&')
+    }
+    function isDateValid(dateStr) {
+        return !isNaN(new Date(dateStr));
+    }
+
+    document.getElementById('calculate').onclick = async function() {
+        const averageSalary = document.getElementById('averageSalary').value;
+        const vacationDays = document.getElementById('vacationDays').value;
+        const startDate = document.getElementById('startDate').value;
+        const endDate = document.getElementById('endDate').value;
+
+        const requestData = isDateValid(startDate) && isDateValid(endDate)
+            ? {
+            avgSalary: parseFloat(averageSalary),
+            duration: parseInt(vacationDays),
+            startDate: new Date(startDate).toISOString(),
+            endDate: new Date(endDate).toISOString()
+            }
+            : {
+                avgSalary: parseFloat(averageSalary),
+                duration: parseInt(vacationDays)
+            };
+        const queryString = encodeParams(requestData);
+        try {
+            const response = await fetch(`http://localhost:8080/calculate?${queryString}`, {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            });
+
+            if (!response.ok) {
+                throw new Error('Сервер вернул ошибку');
+            }
+
+            const data = await response.json();
+            document.getElementById('result').innerText = `Отпускные: ${data}`;
+        } catch (error) {
+            document.getElementById('result').innerText = `Ошибка: ${error.message}`;
+        }
+    };
+</script>
+</body>
+</html>
